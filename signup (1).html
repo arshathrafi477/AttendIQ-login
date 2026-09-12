@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AttendIQ — Create Account</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:      #1a237e;
+  --navy2:     #283593;
+  --saffron:   #e87722;
+  --saffron-d: #c9621a;
+  --ink:       #0d0d0f;
+  --ink2:      #3d3d42;
+  --ink3:      #7a7a82;
+  --green:     #16a34a;
+  --red:       #dc2626;
+  --cream:     #f0ede8;
+  --white:     #ffffff;
+  --border:    #e0ddd8;
+  --input-h:   50px;
+  --r:         12px;
+  --ease:      cubic-bezier(.22,1,.36,1);
+}
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { -webkit-text-size-adjust:100%; }
+body {
+  font-family:'Outfit',sans-serif;
+  min-height:100vh;
+  display:flex; align-items:center; justify-content:center;
+  padding:24px 16px;
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(57,73,171,.6) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 20%, rgba(26,35,126,.5) 0%, transparent 55%),
+    linear-gradient(135deg,#1a237e 0%,#283593 50%,#3949ab 100%);
+  background-attachment:fixed;
+  -webkit-font-smoothing:antialiased;
+}
+.card {
+  background:#fff; border-radius:20px;
+  box-shadow:0 32px 80px rgba(0,0,0,.35), 0 0 0 1px rgba(0,0,0,.06);
+  width:100%; max-width:440px; position:relative; overflow:hidden;
+  animation:slideUp .35s var(--ease) both;
+}
+@keyframes slideUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+.panel { padding:28px 26px 30px; }
+.auth-header { text-align:center; padding-bottom:18px; margin-bottom:18px; border-bottom:1px solid var(--border); }
+.auth-icon { font-size:2.2rem; display:block; margin-bottom:8px; }
+.auth-title { font-family:'Fraunces',serif; font-size:1.6rem; font-weight:700; color:var(--navy); letter-spacing:-.02em; margin-bottom:3px; }
+.auth-subtitle { font-size:.9rem; color:var(--ink2); font-weight:500; margin-bottom:2px; }
+.auth-hint { font-size:.78rem; color:var(--ink3); }
+.steps { display:flex; align-items:center; margin-bottom:22px; list-style:none; }
+.step-item { display:flex; flex-direction:column; align-items:center; gap:5px; flex-shrink:0; }
+.step-dot { width:30px; height:30px; border-radius:50%; border:2px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:.75rem; font-weight:700; color:var(--ink3); background:#fff; transition:all .25s; }
+.step-item.active .step-dot { background:var(--saffron); border-color:var(--saffron); color:#fff; box-shadow:0 4px 12px rgba(232,119,34,.3); }
+.step-item.done   .step-dot { background:var(--green); border-color:var(--green); color:#fff; }
+.step-lbl { font-size:.63rem; font-weight:600; color:var(--ink3); text-transform:uppercase; letter-spacing:.06em; }
+.step-item.active .step-lbl { color:var(--saffron); }
+.step-item.done   .step-lbl { color:var(--green); }
+.step-line { flex:1; height:2px; background:var(--border); margin-bottom:18px; transition:background .25s; }
+.step-line.done { background:var(--green); }
+.verified-banner { display:flex; align-items:center; justify-content:center; gap:6px; background:rgba(22,163,74,.08); border:1px solid rgba(22,163,74,.25); color:var(--green); font-size:.8rem; font-weight:700; border-radius:10px; padding:8px 12px; margin-bottom:18px; }
+.form-error { background:rgba(220,38,38,.07); color:var(--red); border:1px solid rgba(220,38,38,.18); border-radius:10px; padding:9px 13px; font-size:.83rem; font-weight:500; margin-bottom:14px; line-height:1.45; }
+.form-error:empty { display:none; }
+.field { margin-bottom:14px; }
+.field-label { display:block; font-size:.82rem; font-weight:600; color:var(--ink2); margin-bottom:6px; }
+.field-wrap { position:relative; display:flex; align-items:center; }
+.field-icon { position:absolute; left:14px; display:flex; align-items:center; justify-content:center; color:var(--ink3); pointer-events:none; width:16px; }
+.field-input { width:100%; height:var(--input-h); padding:0 14px 0 40px; border:1.5px solid var(--border); border-radius:var(--r); font-family:'Outfit',sans-serif; font-size:.95rem; color:var(--ink); background:#fafafa; outline:none; -webkit-appearance:none; transition:border-color .15s, box-shadow .15s, background .15s; }
+.field-input::placeholder { color:#b8b8c0; }
+.field-input:focus { border-color:var(--navy2); background:#fff; box-shadow:0 0 0 3px rgba(40,53,147,.1); }
+.field-input.has-right { padding-right:44px; }
+.field-input.is-valid   { border-color:var(--green); }
+.field-input.is-invalid { border-color:var(--red); }
+.field-input[readonly] { background:rgba(22,163,74,.06); border-color:rgba(22,163,74,.35); color:var(--ink2); cursor:not-allowed; }
+.field-eye { position:absolute; right:12px; background:none; border:none; cursor:pointer; color:var(--ink3); display:flex; align-items:center; height:100%; padding:0 4px; transition:color .15s; }
+.field-eye:hover { color:var(--ink); }
+.field-eye .eye-closed { display:none; }
+.field-eye.shown .eye-open   { display:none; }
+.field-eye.shown .eye-closed { display:block; }
+.verified-tick { position:absolute; right:14px; display:flex; align-items:center; gap:4px; color:var(--green); font-size:.78rem; font-weight:700; }
+.field-msg   { font-size:.76rem; margin-top:5px; min-height:15px; font-weight:600; display:flex; align-items:center; gap:5px; }
+.field-msg.ok   { color:var(--green); }
+.field-msg.bad  { color:var(--red); }
+.field-msg:empty { min-height:0; margin-top:0; }
+.otp-row { display:flex; gap:8px; justify-content:center; margin:6px 0 4px; }
+.otp-box { width:44px; height:52px; border:1.5px solid var(--border); border-radius:10px; text-align:center; font-size:1.3rem; font-weight:700; color:var(--ink); background:#fafafa; outline:none; transition:border-color .15s, box-shadow .15s, background .15s; }
+.otp-box:focus { border-color:var(--navy2); background:#fff; box-shadow:0 0 0 3px rgba(40,53,147,.1); }
+.otp-box.filled { border-color:var(--saffron); background:#fff; }
+.otp-meta { display:flex; align-items:center; justify-content:space-between; margin-top:6px; }
+.otp-timer { font-size:.78rem; color:var(--ink3); }
+.link-btn { background:none; border:none; cursor:pointer; color:var(--navy2); font-weight:700; font-size:.8rem; font-family:'Outfit',sans-serif; padding:0; }
+.link-btn:disabled { color:var(--ink3); cursor:not-allowed; }
+.email-pill { text-align:center; font-size:.82rem; color:var(--ink2); background:var(--cream); border-radius:10px; padding:8px 12px; margin-bottom:14px; font-weight:500; }
+.pw-strength { display:flex; align-items:center; gap:8px; margin-top:8px; }
+.strength-track { flex:1; height:4px; background:var(--border); border-radius:2px; overflow:hidden; }
+.strength-bar   { height:100%; width:0; border-radius:2px; transition:width .25s, background .25s; }
+.strength-bar[data-l="1"] { width:25%;  background:var(--red); }
+.strength-bar[data-l="2"] { width:50%;  background:#d97706; }
+.strength-bar[data-l="3"] { width:75%;  background:#84cc16; }
+.strength-bar[data-l="4"] { width:100%; background:var(--green); }
+.strength-lbl { font-size:.72rem; font-weight:700; min-width:48px; text-align:right; color:var(--ink3); }
+.plan-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-top:6px; }
+.plan-card { border:1.5px solid var(--border); border-radius:12px; padding:12px 10px; cursor:pointer; text-align:center; transition:all .15s; position:relative; background:#fff; }
+.plan-card:hover { border-color:var(--saffron); }
+.plan-card.selected { border-color:var(--saffron); background:rgba(232,119,34,.05); box-shadow:0 0 0 3px rgba(232,119,34,.1); }
+.plan-icon { font-size:1.2rem; display:block; margin-bottom:4px; }
+.plan-name { font-size:.82rem; font-weight:700; color:var(--ink); margin-bottom:5px; }
+.plan-feat { font-size:.68rem; color:var(--ink3); line-height:1.5; }
+.plan-check { position:absolute; top:-7px; right:-7px; width:20px; height:20px; border-radius:50%; background:var(--saffron); color:#fff; font-size:.65rem; font-weight:700; display:none; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(232,119,34,.4); }
+.plan-card.selected .plan-check { display:flex; }
+.btn { width:100%; padding:14px; border-radius:var(--r); border:none; font-family:'Outfit',sans-serif; font-size:.95rem; font-weight:700; cursor:pointer; transition:all .15s; display:flex; align-items:center; justify-content:center; gap:8px; position:relative; overflow:hidden; }
+.btn:active:not(:disabled) { transform:scale(.98); }
+.btn:disabled { opacity:.55; cursor:not-allowed; }
+.btn-primary { background:var(--saffron); color:#fff; box-shadow:0 4px 16px rgba(232,119,34,.35); margin-top:6px; }
+.btn-primary:hover:not(:disabled) { background:var(--saffron-d); box-shadow:0 6px 20px rgba(232,119,34,.45); }
+.spinner { width:16px; height:16px; border-radius:50%; border:2.5px solid rgba(255,255,255,.35); border-top-color:#fff; animation:spin .65s linear infinite; display:none; flex-shrink:0; }
+.btn.loading .btn-txt { opacity:0; }
+.btn.loading .spinner { display:block; position:absolute; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.success-view { display:none; text-align:center; padding:12px 4px 4px; }
+.success-view.active { display:block; animation:slideUp .35s var(--ease) both; }
+.success-check { width:70px; height:70px; border-radius:50%; background:rgba(22,163,74,.1); color:var(--green); display:flex; align-items:center; justify-content:center; margin:0 auto 18px; font-size:2rem; animation:popIn .4s var(--ease) both; }
+@keyframes popIn { from{opacity:0; transform:scale(.6);} to{opacity:1; transform:scale(1);} }
+.success-title { font-family:'Fraunces',serif; font-size:1.4rem; font-weight:700; color:var(--navy); margin-bottom:6px; }
+.success-sub { font-size:.9rem; color:var(--ink3); margin-bottom:26px; }
+.step-view { display:none; }
+.step-view.active { display:block; animation:slideUp .3s var(--ease) both; }
+@media (max-width:400px) {
+  body { padding:16px 10px; }
+  .panel { padding:22px 18px 26px; }
+  .plan-grid { grid-template-columns:1fr; }
+  .plan-card { display:flex; align-items:center; gap:10px; text-align:left; padding:10px 12px; }
+  .plan-icon { margin-bottom:0; }
+  .plan-feat { display:none; }
+  .otp-box { width:38px; height:48px; font-size:1.15rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="card" id="auth-card">
+  <div class="panel">
+
+    <div class="auth-header">
+      <span class="auth-icon">🎓</span>
+      <h1 class="auth-title">AttendIQ</h1>
+      <p class="auth-subtitle" id="auth-subtitle">Create your account</p>
+      <p class="auth-hint" id="auth-hint">Enter your email to get started.</p>
+    </div>
+
+    <ul class="steps" id="steps-bar">
+      <li class="step-item active" id="step-dot-1"><span class="step-dot">1</span><span class="step-lbl">Email</span></li>
+      <div class="step-line" id="step-line-1"></div>
+      <li class="step-item" id="step-dot-2"><span class="step-dot">2</span><span class="step-lbl">Verify</span></li>
+      <div class="step-line" id="step-line-2"></div>
+      <li class="step-item" id="step-dot-3"><span class="step-dot">3</span><span class="step-lbl">Details</span></li>
+    </ul>
+
+    <!-- STEP 1 — EMAIL -->
+    <div class="step-view active" id="step-view-1">
+      <p class="form-error" id="email-error"></p>
+      <div class="field">
+        <label class="field-label" for="email-input">Email Address</label>
+        <div class="field-wrap">
+          <span class="field-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </span>
+          <input type="email" id="email-input" class="field-input" placeholder="you@example.com" autocomplete="email">
+        </div>
+      </div>
+      <button class="btn btn-primary" id="btn-send-otp">
+        <span class="btn-txt">Send Verification Code</span>
+        <div class="spinner"></div>
+      </button>
+    </div>
+
+    <!-- STEP 2 — OTP -->
+    <div class="step-view" id="step-view-2">
+      <p class="form-error" id="otp-error"></p>
+      <div class="email-pill" id="otp-email-pill"></div>
+      <div class="field">
+        <label class="field-label" style="text-align:center">Enter 6-digit code</label>
+        <div class="otp-row">
+          <input class="otp-box" maxlength="1" inputmode="numeric" data-i="0">
+          <input class="otp-box" maxlength="1" inputmode="numeric" data-i="1">
+          <input class="otp-box" maxlength="1" inputmode="numeric" data-i="2">
+          <input class="otp-box" maxlength="1" inputmode="numeric" data-i="3">
+          <input class="otp-box" maxlength="1" inputmode="numeric" data-i="4">
+          <input class="otp-box" maxlength="1" inputmode="numeric" data-i="5">
+        </div>
+        <div class="otp-meta">
+          <span class="otp-timer" id="otp-timer">Resend available in 60s</span>
+          <button class="link-btn" id="btn-resend" disabled>Resend code</button>
+        </div>
+      </div>
+      <button class="btn btn-primary" id="btn-verify-otp">
+        <span class="btn-txt">Verify Code</span>
+        <div class="spinner"></div>
+      </button>
+    </div>
+
+    <!-- STEP 3 — ACCOUNT DETAILS -->
+    <div class="step-view" id="step-view-3">
+      <div class="verified-banner"><span>✓</span><span>Email verified</span></div>
+      <p class="form-error" id="su-error"></p>
+
+      <div class="field">
+        <label class="field-label" for="su-email">Verified Email</label>
+        <div class="field-wrap">
+          <span class="field-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </span>
+          <input type="email" id="su-email" class="field-input" readonly>
+          <span class="verified-tick">✓ Verified</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="su-username">Username</label>
+        <div class="field-wrap">
+          <span class="field-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          </span>
+          <input type="text" id="su-username" class="field-input" placeholder="Choose a username" autocomplete="username" autocapitalize="none" spellcheck="false">
+        </div>
+        <p class="field-msg" id="su-username-msg"></p>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="su-name">Full Name</label>
+        <div class="field-wrap">
+          <span class="field-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </span>
+          <input type="text" id="su-name" class="field-input" placeholder="Enter your full name" autocomplete="name">
+        </div>
+        <p class="field-msg" id="su-name-msg"></p>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="su-pw">Password</label>
+        <div class="field-wrap">
+          <span class="field-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </span>
+          <input type="password" id="su-pw" class="field-input has-right" placeholder="Min 8 characters" autocomplete="new-password">
+          <button type="button" class="field-eye" data-target="su-pw" aria-label="Toggle password visibility">
+            <svg class="eye-open"   width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="eye-closed" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+          </button>
+        </div>
+        <div class="pw-strength">
+          <div class="strength-track"><div class="strength-bar" id="sw-bar" data-l="0"></div></div>
+          <span class="strength-lbl" id="sw-lbl"></span>
+        </div>
+        <p class="field-msg" id="su-pw-msg"></p>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="su-pw2">Confirm Password</label>
+        <div class="field-wrap">
+          <span class="field-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </span>
+          <input type="password" id="su-pw2" class="field-input has-right" placeholder="Re-enter password" autocomplete="new-password">
+          <button type="button" class="field-eye" data-target="su-pw2" aria-label="Toggle password visibility">
+            <svg class="eye-open"   width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="eye-closed" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+          </button>
+        </div>
+        <p class="field-msg" id="su-pw2-msg"></p>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="su-inst">Institution Name</label>
+        <div class="field-wrap">
+          <span class="field-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </span>
+          <input type="text" id="su-inst" class="field-input" placeholder="Enter your college / institution name" autocomplete="organization">
+        </div>
+        <p class="field-msg" id="su-inst-msg"></p>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Plan</label>
+        <div class="plan-grid" role="radiogroup" aria-label="Choose a plan">
+          <label class="plan-card selected" data-plan="free">
+            <input type="radio" name="plan" value="free" style="display:none" checked>
+            <span class="plan-check">✓</span>
+            <span class="plan-icon">🆓</span>
+            <div class="plan-name">Free</div>
+            <div class="plan-feat">Basic AttendIQ features</div>
+          </label>
+          <label class="plan-card" data-plan="standard">
+            <input type="radio" name="plan" value="standard" style="display:none">
+            <span class="plan-check">✓</span>
+            <span class="plan-icon">📊</span>
+            <div class="plan-name">Standard</div>
+            <div class="plan-feat">Attendance, reports &amp; more</div>
+          </label>
+          <label class="plan-card" data-plan="professional">
+            <input type="radio" name="plan" value="professional" style="display:none">
+            <span class="plan-check">✓</span>
+            <span class="plan-icon">⭐</span>
+            <div class="plan-name">Professional</div>
+            <div class="plan-feat">Advanced analytics &amp; premium features</div>
+          </label>
+        </div>
+        <p class="field-msg" id="su-plan-msg"></p>
+      </div>
+
+      <button class="btn btn-primary" id="btn-create">
+        <span class="btn-txt">Create Account</span>
+        <div class="spinner"></div>
+      </button>
+    </div>
+
+    <!-- SUCCESS VIEW -->
+    <div class="success-view" id="success-view">
+      <div class="success-check">✓</div>
+      <p class="success-title">Account created successfully</p>
+      <p class="success-sub">Welcome to AttendIQ.</p>
+      <button class="btn btn-primary" id="btn-continue-login">
+        <span class="btn-txt">Continue to Login</span>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<div id="toasts"></div>
+
+<style>
+#toasts { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); z-index:9999; display:flex; flex-direction:column; align-items:center; gap:8px; pointer-events:none; min-width:200px; }
+.toast { padding:11px 20px; border-radius:12px; font-size:.875rem; font-weight:500; box-shadow:0 8px 28px rgba(0,0,0,.22); animation:toastIn .3s cubic-bezier(.22,1,.36,1) both; pointer-events:all; max-width:320px; text-align:center; color:#fff; }
+.toast.success { background:rgba(22,163,74,.96); }
+.toast.err     { background:rgba(220,38,38,.96); }
+.toast.out     { animation:toastOut .3s ease forwards; }
+@keyframes toastIn  { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+@keyframes toastOut { from{opacity:1} to{opacity:0;transform:translateY(8px)} }
+</style>
+
+<script>
+/* AttendIQ — signup.html (combined email OTP + account details) */
+
+const API_URL = 'https://script.google.com/macros/s/AKfycbyft8M0fqGkh8jgvDwjcVN7ITO_VJWJibBb9qpw-BFRVVxfTdVS78erICh-SXvjeYJeYQ/exec';
+
+async function post(action, payload) {
+  const res = await fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action, payload })
+  });
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  return await res.json();
+}
+
+function toast(msg, type='success') {
+  const tc = document.getElementById('toasts');
+  const t  = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.textContent = msg;
+  tc.appendChild(t);
+  setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 350); }, 3200);
+}
+
+function setLoad(btn, on) { btn.classList.toggle('loading', on); btn.disabled = on; }
+
+function setMsg(id, text, ok) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = text || '';
+  el.classList.remove('ok', 'bad');
+  if (text) el.classList.add(ok ? 'ok' : 'bad');
+}
+
+function goToStep(n) {
+  document.querySelectorAll('.step-view').forEach(v => v.classList.remove('active'));
+  document.getElementById('step-view-' + n).classList.add('active');
+  for (let i = 1; i <= 3; i++) {
+    const dot = document.getElementById('step-dot-' + i);
+    dot.classList.remove('active', 'done');
+    if (i < n)  dot.classList.add('done');
+    if (i === n) dot.classList.add('active');
+  }
+  document.getElementById('step-line-1').classList.toggle('done', n > 1);
+  document.getElementById('step-line-2').classList.toggle('done', n > 2);
+  const subs  = ['Create your account', 'Verify your email', 'Almost there'];
+  const hints = ['Enter your email to get started.', 'Enter the 6-digit code we sent you.', 'Complete your account details to finish.'];
+  document.getElementById('auth-subtitle').textContent = subs[n-1];
+  document.getElementById('auth-hint').textContent = hints[n-1];
+}
+
+let verifiedEmail = '';
+
+document.getElementById('btn-send-otp').addEventListener('click', async () => {
+  const email = document.getElementById('email-input').value.trim();
+  document.getElementById('email-error').textContent = '';
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    document.getElementById('email-error').textContent = 'Please enter a valid email address.';
+    return;
+  }
+  const btn = document.getElementById('btn-send-otp');
+  setLoad(btn, true);
+  try {
+    const data = await post('sendOtp', { email });
+    if (data.success) {
+      verifiedEmail = email;
+      document.getElementById('otp-email-pill').textContent = 'Code sent to ' + email;
+      clearOtpBoxes();
+      goToStep(2);
+      startTimer(60);
+      toast('Verification code sent!', 'success');
+    } else {
+      document.getElementById('email-error').textContent = data.message || 'Failed to send code.';
+    }
+  } catch (err) {
+    document.getElementById('email-error').textContent = 'Could not reach the server. Please try again.';
+  }
+  setLoad(btn, false);
+});
+
+const otpBoxes = [...document.querySelectorAll('.otp-box')];
+function getOtp()   { return otpBoxes.map(b => b.value).join(''); }
+function clearOtpBoxes() { otpBoxes.forEach(b => { b.value=''; b.classList.remove('filled'); }); }
+
+otpBoxes.forEach((box, i) => {
+  box.addEventListener('input', e => {
+    const v = e.target.value.replace(/\D/g,'');
+    box.value = v;
+    v ? box.classList.add('filled') : box.classList.remove('filled');
+    if (v && i < 5) otpBoxes[i+1].focus();
+  });
+  box.addEventListener('keydown', e => {
+    if (e.key === 'Backspace' && !box.value && i > 0) {
+      otpBoxes[i-1].value = ''; otpBoxes[i-1].classList.remove('filled'); otpBoxes[i-1].focus();
+    }
+  });
+  box.addEventListener('paste', e => {
+    e.preventDefault();
+    const p = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g,'').slice(0,6);
+    p.split('').forEach((ch, idx) => { if (otpBoxes[idx]) { otpBoxes[idx].value = ch; otpBoxes[idx].classList.add('filled'); } });
+    if (p.length === 6) setTimeout(() => document.getElementById('btn-verify-otp').click(), 80);
+    else otpBoxes[Math.min(p.length, 5)]?.focus();
+  });
+});
+
+let timerHandle = null;
+function startTimer(seconds) {
+  const btn = document.getElementById('btn-resend');
+  const el  = document.getElementById('otp-timer');
+  clearInterval(timerHandle);
+  btn.disabled = true;
+  let t = seconds;
+  const tick = () => {
+    el.textContent = t > 0 ? 'Resend available in ' + t + 's' : 'You can resend the code now';
+    if (t-- <= 0) { clearInterval(timerHandle); btn.disabled = false; }
+  };
+  tick();
+  timerHandle = setInterval(tick, 1000);
+}
+
+document.getElementById('btn-verify-otp').addEventListener('click', async () => {
+  const otp = getOtp();
+  document.getElementById('otp-error').textContent = '';
+  if (otp.length < 6) {
+    document.getElementById('otp-error').textContent = 'Enter the complete 6-digit code.';
+    return;
+  }
+  const btn = document.getElementById('btn-verify-otp');
+  setLoad(btn, true);
+  try {
+    const data = await post('verifyOtp', { email: verifiedEmail, otp });
+    if (data.success) {
+      clearInterval(timerHandle);
+      document.getElementById('su-email').value = verifiedEmail;
+      goToStep(3);
+      toast('Email verified! ✅', 'success');
+    } else {
+      document.getElementById('otp-error').textContent = data.message || 'Incorrect code.';
+      clearOtpBoxes();
+      otpBoxes[0].focus();
+    }
+  } catch (err) {
+    document.getElementById('otp-error').textContent = 'Could not reach the server. Please try again.';
+  }
+  setLoad(btn, false);
+});
+
+document.getElementById('btn-resend').addEventListener('click', async () => {
+  if (!verifiedEmail) return;
+  document.getElementById('otp-error').textContent = '';
+  try {
+    const data = await post('sendOtp', { email: verifiedEmail });
+    if (data.success) { clearOtpBoxes(); startTimer(60); toast('New code sent!', 'success'); }
+    else document.getElementById('otp-error').textContent = data.message || 'Failed to resend.';
+  } catch (err) {
+    document.getElementById('otp-error').textContent = 'Network error. Please try again.';
+  }
+});
+
+document.querySelectorAll('.field-eye').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const inp = document.getElementById(btn.dataset.target);
+    if (!inp) return;
+    const show = inp.type === 'password';
+    inp.type = show ? 'text' : 'password';
+    btn.classList.toggle('shown', show);
+  });
+});
+
+const usernameRe = /^[a-z0-9_]{3,20}$/;
+const usernameInput = document.getElementById('su-username');
+usernameInput.addEventListener('input', () => {
+  const v = usernameInput.value.trim();
+  usernameInput.classList.remove('is-valid', 'is-invalid');
+  if (!v) { setMsg('su-username-msg', ''); return; }
+  if (usernameRe.test(v)) {
+    usernameInput.classList.add('is-valid');
+    setMsg('su-username-msg', '✓ Username available format', true);
+  } else {
+    usernameInput.classList.add('is-invalid');
+    setMsg('su-username-msg', '✕ Use 3–20 lowercase letters, numbers or underscore', false);
+  }
+});
+
+const pwInput  = document.getElementById('su-pw');
+const pw2Input = document.getElementById('su-pw2');
+
+function scorePassword(pw) {
+  let s = 0;
+  if (pw.length >= 8)          s++;
+  if (/[A-Z]/.test(pw))        s++;
+  if (/[0-9]/.test(pw))        s++;
+  if (/[^a-zA-Z0-9]/.test(pw)) s++;
+  return s;
+}
+
+pwInput.addEventListener('input', () => {
+  const pw = pwInput.value;
+  const s = scorePassword(pw);
+  document.getElementById('sw-bar').setAttribute('data-l', pw ? s : 0);
+  const labels = ['', 'Weak', 'Weak', 'Medium', 'Strong'];
+  document.getElementById('sw-lbl').textContent = pw ? labels[s] : '';
+  if (!pw) { setMsg('su-pw-msg', ''); pwInput.classList.remove('is-valid','is-invalid'); }
+  else if (pw.length < 8) {
+    setMsg('su-pw-msg', '✕ Minimum 8 characters', false);
+    pwInput.classList.add('is-invalid'); pwInput.classList.remove('is-valid');
+  } else {
+    setMsg('su-pw-msg', '✓ Minimum 8 characters', true);
+    pwInput.classList.add('is-valid'); pwInput.classList.remove('is-invalid');
+  }
+  checkPasswordsMatch();
+});
+
+function checkPasswordsMatch() {
+  const pw  = pwInput.value;
+  const pw2 = pw2Input.value;
+  if (!pw2) { setMsg('su-pw2-msg', ''); pw2Input.classList.remove('is-valid','is-invalid'); return; }
+  if (pw === pw2) {
+    setMsg('su-pw2-msg', '✓ Passwords match', true);
+    pw2Input.classList.add('is-valid'); pw2Input.classList.remove('is-invalid');
+  } else {
+    setMsg('su-pw2-msg', '✕ Passwords do not match', false);
+    pw2Input.classList.add('is-invalid'); pw2Input.classList.remove('is-valid');
+  }
+}
+pw2Input.addEventListener('input', checkPasswordsMatch);
+
+let selectedPlan = 'free';
+document.querySelectorAll('.plan-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    const r = card.querySelector('input[type=radio]');
+    if (r) { r.checked = true; selectedPlan = r.value; }
+    setMsg('su-plan-msg', '');
+  });
+});
+
+function goToLogin() { window.location.href = 'login.html'; }
+document.getElementById('btn-continue-login').addEventListener('click', goToLogin);
+
+document.getElementById('btn-create').addEventListener('click', async () => {
+  const email       = document.getElementById('su-email').value.trim();
+  const username    = usernameInput.value.trim().toLowerCase();
+  const fullname    = document.getElementById('su-name').value.trim();
+  const password    = pwInput.value;
+  const password2   = pw2Input.value;
+  const institution = document.getElementById('su-inst').value.trim();
+
+  document.getElementById('su-error').textContent = '';
+  setMsg('su-name-msg', '');
+  setMsg('su-inst-msg', '');
+
+  let firstError = '';
+  if (!fullname) { setMsg('su-name-msg', '✕ Please enter your full name.', false); firstError = firstError || 'Please enter your full name.'; }
+  if (!usernameRe.test(username)) { setMsg('su-username-msg', '✕ Use 3–20 lowercase letters, numbers or underscore', false); firstError = firstError || 'Username format is invalid.'; }
+  if (password.length < 8) { setMsg('su-pw-msg', '✕ Minimum 8 characters', false); firstError = firstError || 'Password must contain at least 8 characters.'; }
+  if (password !== password2) { setMsg('su-pw2-msg', '✕ Passwords do not match', false); firstError = firstError || 'Passwords do not match.'; }
+  if (!institution) { setMsg('su-inst-msg', '✕ Institution name is required.', false); firstError = firstError || 'Institution name is required.'; }
+  if (!selectedPlan) { setMsg('su-plan-msg', '✕ Please select a plan.', false); firstError = firstError || 'Please select a plan.'; }
+
+  if (firstError) {
+    document.getElementById('su-error').textContent = firstError;
+    toast(firstError, 'err');
+    return;
+  }
+
+  const btn = document.getElementById('btn-create');
+  setLoad(btn, true);
+
+  const userData = { email, username, fullname, password, institution_name: institution, plan: selectedPlan };
+
+  try {
+    const data = await post('signup', userData);
+    setLoad(btn, false);
+    if (!data || !data.success) {
+      const msg = (data && data.message) || 'Signup failed. Please try again.';
+      document.getElementById('su-error').textContent = msg;
+      toast(msg, 'err');
+      return;
+    }
+    document.getElementById('step-view-3').classList.remove('active');
+    document.getElementById('steps-bar').style.display = 'none';
+    document.getElementById('success-view').classList.add('active');
+    toast('Account created successfully! 🎉', 'success');
+  } catch (err) {
+    setLoad(btn, false);
+    const msg = 'Could not reach the server. Please check your connection and try again.';
+    document.getElementById('su-error').textContent = msg;
+    toast(msg, 'err');
+  }
+});
+</script>
+</body>
+</html>
